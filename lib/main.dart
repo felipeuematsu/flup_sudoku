@@ -1,9 +1,12 @@
-import 'package:flup_sudoku/config/pages.dart';
+import 'package:flup_sudoku/common/pages.dart';
+import 'package:flup_sudoku/common/strings.dart';
+import 'package:flup_sudoku/common/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(FlupSudoku());
+  runApp(const FlupSudoku());
 }
 
 class FlupSudoku extends StatelessWidget {
@@ -12,11 +15,15 @@ class FlupSudoku extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'FlupSudoku',
+      title: 'Flup Sudoku',
+      locale: const Locale('en', 'US'),
+      translations: Strings(),
       getPages: Pages.get,
+      initialRoute: PageNames.game.route,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: lightColorScheme.background,
+        colorScheme: lightColorScheme,
+        textTheme: GoogleFonts.robotoTextTheme()
       ),
     );
   }

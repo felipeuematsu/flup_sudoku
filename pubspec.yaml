@@ -35,10 +35,16 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get: ^4.6.1
+  hive: ^2.0.6
+  hive_flutter: ^1.1.0
+  logger: ^1.1.0
+  flutter_secure_storage: ^5.0.2
+  google_fonts: ^2.3.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator: ^1.1.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -74,10 +80,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+   - family: PermanentMarker
+     fonts:
+       - asset: assets/fonts/permanent_marker/PermanentMarker-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
