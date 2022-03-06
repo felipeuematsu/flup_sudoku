@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flup_sudoku/model/sudoku_model.dart';
 import 'package:flup_sudoku/ui/game/components/game_cell.dart';
 import 'package:flup_sudoku/util/logger.dart';
@@ -17,9 +19,15 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
   final _guessMode = GuessMode.guess.obs;
 
   set guessMode(GuessMode mode) => _guessMode.value = mode;
+
   GuessMode get guessMode => _guessMode.value;
 
-  final mistakes = Rx<int>(0);
+  final _mistakes = Rx<int>(0);
+  final _time = Rx<int>(0);
+
+  String get mistakes => _mistakes.value.toString();
+
+  String get elapsedTime => Duration(seconds: _time.value).toString().substring(_time.value < 3600 ? 2 : 0, 7);
 
   final selectedRow = Rx<int>(-1);
   final selectedColumn = Rx<int>(-1);
@@ -40,6 +48,8 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
     verticalAnimation = Tween<double>(begin: -1, end: 8).animate(_verticalAnimationController)..addListener(() => update());
     horizontalAnimation = Tween<double>(begin: -1, end: 8).animate(_horizontalAnimationController)..addListener(() => update());
 
+    Timer.periodic(const Duration(seconds: 1), (timer) => _time.value++);
+
     model = SudokuModel.fromCSVLine(
         '1,1..5.37..6.3..8.9......98...1.......8761..........6...........7.8.9.76.47...6.312,198543726643278591527619843914735268876192435235486179462351987381927654759864312,27,2.2');
 
@@ -51,15 +61,15 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
         _currentState[row].add(Rx<int>(model.initalStateAsList[row][column]));
       }
     }
-
+    logger.i(_currentState);
     super.onInit();
   }
 
-  int _getCurrentValue(row, column) => selectedRow.value < 0 || selectedColumn.value < 0 ? 0 : _currentState[row][column].value;
+  int _getCurrentValue(row, column) => row < 0 || column < 0 ? 0 : _currentState[row][column].value;
 
   Map<int, GuessMode> getCellValue(int row, int column) {
     if (_getCurrentValue(row, column) != 0) return {_getCurrentValue(row, column): GuessMode.insert};
-    if (selectedRow.value < 0 || selectedColumn.value < 0) return {};
+    if (row < 0 || column < 0) return {};
     return _guesses[row][column].value.map((int key, GuessMode value) => MapEntry<int, GuessMode>(key, value));
   }
 
@@ -116,7 +126,7 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
 
     logger.i('insertAnswer: $answer');
     _currentState[row][column].update((val) => val = answer);
-    if (answer != _answer[row][column]) mistakes.value++;
+    if (answer != _answer[row][column]) _mistakes.value++;
   }
 
   GameCellValueType contentType(int row, int column) {

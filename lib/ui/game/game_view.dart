@@ -1,7 +1,9 @@
 import 'package:flup_sudoku/ui/game/components/game_board.dart';
 import 'package:flup_sudoku/ui/game/components/game_control.dart';
 import 'package:flup_sudoku/ui/game/game_controller.dart';
+import 'package:flup_sudoku/ui/game/game_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class GameView extends GetView<GameController> {
@@ -24,16 +26,20 @@ class GameView extends GetView<GameController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Id: ${controller.model.id}'),
-                        Obx(() => Text('Mistakes: ${controller.mistakes}')),
+                        GestureDetector(
+                          child: Text('${GameStrings.id.tr} ${controller.model.id}'),
+                          onTap: () => Clipboard.setData(ClipboardData(text: controller.model.id.toString())),
+                        ),
+                        Obx(() => Text('${GameStrings.time.tr} ${controller.elapsedTime}')),
+                        Obx(() => Text('${GameStrings.mistakes.tr} ${controller.mistakes}')),
                       ],
                     ),
-                    GameBoard(),
+                    const GameBoard(),
                   ],
                 ),
               ),
             ),
-            GameControl(),
+            const GameControl(),
           ],
         ),
       ),

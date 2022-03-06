@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 class GameTranslations extends AbstractTranslations {
   @override
-  // TODO: implement enUs
   Map<Enum, String> get enUs => {
     GameStrings.id: 'Id:',
     GameStrings.time: 'Time:',
