@@ -11,20 +11,13 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
   List<List<int>> get _answer => model.answerAsList;
 
   List<List<int>> get _initialState => model.initalStateAsList;
-  final _currentState = Rx<List<List<int>>>([]);
-  final _guesses = Rx<List<List<Map<int, bool>>>>([
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-  ]);
+  final List<List<Rx<int>>> _currentState = [];
+  final List<List<Rx<Map<int, GuessMode>>>> _guesses = [];
 
-  final guessMode = GuessMode.guess.obs;
+  final _guessMode = GuessMode.guess.obs;
+
+  set guessMode(GuessMode mode) => _guessMode.value = mode;
+  GuessMode get guessMode => _guessMode.value;
 
   final mistakes = Rx<int>(0);
 
@@ -50,16 +43,24 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
     model = SudokuModel.fromCSVLine(
         '1,1..5.37..6.3..8.9......98...1.......8761..........6...........7.8.9.76.47...6.312,198543726643278591527619843914735268876192435235486179462351987381927654759864312,27,2.2');
 
-    _currentState.value = model.initalStateAsList;
+    for (int row = 0; row < 9; row++) {
+      _guesses.add([]);
+      _currentState.add([]);
+      for (int column = 0; column < 9; column++) {
+        _guesses[row].add(Rx<Map<int, GuessMode>>({}));
+        _currentState[row].add(Rx<int>(model.initalStateAsList[row][column]));
+      }
+    }
+
     super.onInit();
   }
 
-  int _getCurrentValue(row, column) => selectedRow.value < 0 || selectedColumn.value < 0 ? 0 : _currentState.value[row][column];
+  int _getCurrentValue(row, column) => selectedRow.value < 0 || selectedColumn.value < 0 ? 0 : _currentState[row][column].value;
 
   Map<int, GuessMode> getCellValue(int row, int column) {
     if (_getCurrentValue(row, column) != 0) return {_getCurrentValue(row, column): GuessMode.insert};
     if (selectedRow.value < 0 || selectedColumn.value < 0) return {};
-    return _guesses.value[row][column].map((key, value) => MapEntry<int, GuessMode>(key, value ? GuessMode.guess : GuessMode.antiGuess));
+    return _guesses[row][column].value.map((int key, GuessMode value) => MapEntry<int, GuessMode>(key, value));
   }
 
   bool isWrong(int row, int column) => _getCurrentValue(row, column) != 0 && _getCurrentValue(row, column) != _answer[row][column];
@@ -84,24 +85,24 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
         }
       };
 
-  Function() onNumberButtonPressed(int value) => guessMode.value == GuessMode.insert ? () => insertAnswer(value) : () => guess(value);
+  Function() onNumberButtonPressed(int value) => guessMode == GuessMode.insert ? () => insertAnswer(value) : () => guess(value);
 
   void guess(int guess) {
     final row = selectedRow.value;
     final column = selectedColumn.value;
     if (row == -1 || column == -1 || _getCurrentValue(row, column) > 0) return;
 
-    final value = _guesses.value[row][column][guess];
+    final value = _guesses[row][column].value[guess];
     if (value != null) {
-      final guessType = value ? GuessMode.guess : GuessMode.antiGuess;
+      final guessType = value;
 
-      if (guessMode.value == guessType) {
-        _guesses.update((val) => val?[row][column].remove(guess));
+      if (guessMode == guessType) {
+        _guesses[row][column].update((val) => val?.remove(guess));
       } else {
-        _guesses.update((val) => val?[row][column][guess] = !value);
+        _guesses[row][column].update((val) => val?[guess] = value == GuessMode.guess ? GuessMode.antiGuess : GuessMode.guess);
       }
     } else {
-      _guesses.update((val) => val?[row][column].putIfAbsent(guess, () => guessMode.value == GuessMode.guess));
+      _guesses[row][column].update((val) => val?.putIfAbsent(guess, () => guessMode));
     }
 
     refresh();
@@ -111,15 +112,10 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
     final row = selectedRow.value;
     final column = selectedColumn.value;
 
-    logger.i(answer);
-    logger.i(_currentState.value);
-    logger.i(_initialState);
     if (row == -1 || column == -1 || _initialState[row][column] != 0 || _answer[row][column] == _getCurrentValue(row, column) || answer == _getCurrentValue(row, column)) return;
 
-    logger.i(answer);
-    logger.i(_currentState.value);
-    logger.i(_initialState.toString());
-    _currentState.update((val) => val?[row][column] = answer);
+    logger.i('insertAnswer: $answer');
+    _currentState[row][column].update((val) => val = answer);
     if (answer != _answer[row][column]) mistakes.value++;
   }
 

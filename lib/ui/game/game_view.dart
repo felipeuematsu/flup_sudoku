@@ -11,23 +11,29 @@ class GameView extends GetView<GameController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Center(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(padding: const EdgeInsets.all(36), child: Obx(() => Text('Mistakes: ${controller.mistakes}'))),
-                  const Padding(
-                    padding: EdgeInsets.all(36),
-                    child: GameBoard(),
-                  ),
-                ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(36),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Id: ${controller.model.id}'),
+                        Obx(() => Text('Mistakes: ${controller.mistakes}')),
+                      ],
+                    ),
+                    GameBoard(),
+                  ],
+                ),
               ),
             ),
-            const Positioned(bottom: 0, right: 0, left: 0, child: GameControl()),
+            GameControl(),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flup_sudoku/common/interfaces/abstract_translations.dart';
+import 'package:flup_sudoku/ui/game/game_strings.dart';
 import 'package:flup_sudoku/ui/home/home_strings.dart';
 import 'package:get/get.dart';
 
@@ -6,6 +7,7 @@ class Strings extends Translations {
   List<AbstractTranslations> get _strings => [
         CommonTranslations(),
         HomeTranslations(),
+        GameTranslations(),
       ];
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flup_sudoku/ui/game/game_controller.dart';
+import 'package:flup_sudoku/util/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,24 +19,29 @@ class GameCell extends GetView<GameController> {
 
   Widget get content {
     final Map<int, GuessMode> cellValue = controller.getCellValue(row, column);
+
     if (cellValue.values.any((element) => element == GuessMode.insert)) {
-      return Text(cellValue.keys.first.toString(), style: style);
-    } else {
-      return GridView.builder(
-        padding: EdgeInsets.zero,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 1),
-        itemBuilder: (context, index) {
-          final value = cellValue[index + 1];
-          return value == null
-              ? Container()
-              : Text(
-                  (index + 1).toString(),
-                  style: Get.textTheme.labelSmall?.copyWith(color: value == GuessMode.guess ? Colors.black : Colors.red.shade700),
-                  textAlign: TextAlign.center,
-                );
-        },
-      );
+      final filtered = cellValue..removeWhere((key, value) => value != GuessMode.insert);
+
+      logger.i('$row $column filtered: $filtered');
+      return Text(filtered.keys.first.toString(), style: style);
     }
+    if (cellValue.isEmpty) return Container();
+
+    return GridView.builder(
+      padding: EdgeInsets.zero,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 1),
+      itemBuilder: (context, index) {
+        final value = cellValue[index + 1];
+        return value == null
+            ? Container()
+            : Text(
+                (index + 1).toString(),
+                style: Get.textTheme.labelSmall?.copyWith(color: value == GuessMode.guess ? Colors.black : Colors.red.shade700),
+                textAlign: TextAlign.center,
+              );
+      },
+    );
   }
 
   Color? get color {
