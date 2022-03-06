@@ -22,14 +22,16 @@ class GameCell extends GetView<GameController> {
       return Text(cellValue.keys.first.toString(), style: style);
     } else {
       return GridView.builder(
+        padding: EdgeInsets.zero,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 1),
         itemBuilder: (context, index) {
-          final value = cellValue[index];
+          final value = cellValue[index + 1];
           return value == null
               ? Container()
               : Text(
                   (index + 1).toString(),
-                  style: Get.textTheme.labelSmall?.copyWith(color: value == GuessMode.guess ? Colors.red.shade700 : Colors.black),
+                  style: Get.textTheme.labelSmall?.copyWith(color: value == GuessMode.guess ? Colors.black : Colors.red.shade700),
+                  textAlign: TextAlign.center,
                 );
         },
       );
@@ -54,7 +56,6 @@ class GameCell extends GetView<GameController> {
         return Get.textTheme.titleLarge?.copyWith(color: Colors.green.shade700);
       case GameCellValueType.selected:
         return Get.textTheme.titleLarge?.copyWith(color: Colors.white38);
-
       default:
         return Get.textTheme.titleLarge;
     }
@@ -69,7 +70,7 @@ class GameCell extends GetView<GameController> {
             highlightElevation: 0,
             elevation: 0,
             padding: EdgeInsets.zero,
-            onPressed: controller.select(row, column),
+            onPressed: controller.gameCellOnPressed(row, column),
             color: color,
             shape: _border,
             child: Center(child: content),
@@ -79,7 +80,6 @@ class GameCell extends GetView<GameController> {
 }
 
 enum GameCellValueType {
-  empty,
   wrong,
   guess,
   antiGuess,

@@ -70,7 +70,7 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
 
   bool isSelected(int row, int column) => selectedColumn.value == column && selectedRow.value == row;
 
-  Function()? select(int row, int column) => () {
+  Function()? gameCellOnPressed(int row, int column) => () {
         final verticalDiff = (selectedRow.value - row).abs();
         final horizontalDiff = (selectedColumn.value - column).abs();
 
@@ -96,12 +96,12 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
       final guessType = value ? GuessMode.guess : GuessMode.antiGuess;
 
       if (guessMode.value == guessType) {
-        _guesses.value[row][column].remove(guess);
+        _guesses.update((val) => val?[row][column].remove(guess));
       } else {
-        _guesses.value[row][column][guess] = !value;
+        _guesses.update((val) => val?[row][column][guess] = !value);
       }
     } else {
-      _guesses.value[row][column].putIfAbsent(guess, () => guessMode.value == GuessMode.guess);
+      _guesses.update((val) => val?[row][column].putIfAbsent(guess, () => guessMode.value == GuessMode.guess));
     }
 
     refresh();
@@ -125,7 +125,6 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
 
   GameCellValueType contentType(int row, int column) {
     if (isInitial(row, column)) return GameCellValueType.initial;
-    if (getCellValue(row, column).length > 1) return GameCellValueType.guess;
     if (isWrong(row, column)) return GameCellValueType.wrong;
     if (isCorrect(row, column)) return GameCellValueType.correct;
     if (isSelected(row, column)) return GameCellValueType.selected;

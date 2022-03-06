@@ -10,12 +10,10 @@ class GameControlNumberButton extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => MaterialButton(
-           focusElevation: 50,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          focusElevation: 50,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           onPressed: controller.onNumberButtonPressed(value),
-          color: controller.selectedCellValue == value.toString() ? Colors.grey : Colors.white,
+          color: controller.selectedCellValue.containsKey(value) ? Colors.grey : Colors.white,
           child: Text(
             value.toString(),
             textAlign: TextAlign.center,
