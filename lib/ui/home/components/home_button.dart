@@ -14,7 +14,7 @@ class HomeButton extends GetView<HomeController> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       color: type.color.withOpacity(0.13),
       minWidth: context.width * 0.8,
-      onPressed: () => controller.onButtonPress(type),
+      onPressed: () => controller.onButtonPressed(type),
       child: Text(
         type.text,
         style: Get.textTheme.titleMedium?.copyWith(

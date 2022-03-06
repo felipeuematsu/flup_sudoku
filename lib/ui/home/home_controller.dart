@@ -30,7 +30,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     continuousAnimation();
   }
 
-  void onButtonPress(HomeButtonType type) {
+  void onButtonPressed(HomeButtonType type) {
     switch (type) {
       case HomeButtonType.newGame:
         Get.offAllNamed('/game');
