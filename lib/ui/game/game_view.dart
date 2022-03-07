@@ -1,6 +1,6 @@
 import 'package:flup_sudoku/ui/game/components/game_board.dart';
 import 'package:flup_sudoku/ui/game/components/game_control.dart';
-import 'package:flup_sudoku/ui/game/game_controller.dart';
+import 'package:flup_sudoku/ui/game/controller/game_controller.dart';
 import 'package:flup_sudoku/ui/game/game_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

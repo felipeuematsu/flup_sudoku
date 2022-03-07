@@ -1,9 +1,10 @@
 import 'package:flup_sudoku/ui/game/components/game_cell.dart';
-import 'package:flup_sudoku/ui/game/game_controller.dart';
+import 'package:flup_sudoku/ui/game/controller/game_animation_controller.dart';
+import 'package:flup_sudoku/ui/game/controller/game_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class GameBoard extends GetView<GameController> {
+class GameBoard extends GetView<GameAnimationController> {
   const GameBoard({Key? key}) : super(key: key);
 
   @override

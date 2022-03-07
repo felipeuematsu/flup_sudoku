@@ -30,20 +30,18 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     continuousAnimation();
   }
 
-  void onButtonPressed(HomeButtonType type) {
+  Future<void> onButtonPressed(HomeButtonType type) async {
     switch (type) {
       case HomeButtonType.newGame:
-        Get.offAllNamed('/game');
-        break;
+        return Get.to('/game');
       case HomeButtonType.loadGame:
-        Get.offAllNamed('/load');
-        break;
+        return Get.to('/load');
       case HomeButtonType.settings:
-        Get.offAllNamed('/settings');
-        break;
+        return Get.to('/settings');
       case HomeButtonType.about:
-        Get.offAllNamed('/about');
-        break;
+        return Get.to('/about');
+      case HomeButtonType.liked:
+        return Get.to('/liked');
     }
   }
 }

@@ -1,5 +1,4 @@
-import 'package:flup_sudoku/ui/game/game_controller.dart';
-import 'package:flup_sudoku/util/logger.dart';
+import 'package:flup_sudoku/ui/game/controller/game_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,12 +17,11 @@ class GameCell extends GetView<GameController> {
         );
 
   Widget get content {
-    final Map<int, GuessMode> cellValue = controller.getCellValue(row, column);
+    final cellValue = controller.getCellValue(row, column);
 
-    if (cellValue.values.any((element) => element == GuessMode.insert)) {
-      final filtered = cellValue..removeWhere((key, value) => value != GuessMode.insert);
+    if (cellValue.values.any((element) => element == InsertMode.insert)) {
+      final filtered = cellValue..removeWhere((key, value) => value != InsertMode.insert);
 
-      logger.i('$row $column filtered: $filtered');
       return Text(filtered.keys.first.toString(), style: style);
     }
     if (cellValue.isEmpty) return Container();
@@ -37,7 +35,7 @@ class GameCell extends GetView<GameController> {
             ? Container()
             : Text(
                 (index + 1).toString(),
-                style: Get.textTheme.labelSmall?.copyWith(color: value == GuessMode.guess ? Colors.black : Colors.red.shade700),
+                style: Get.textTheme.labelSmall?.copyWith(color: value == InsertMode.guess ? Colors.black : Colors.red.shade700),
                 textAlign: TextAlign.center,
               );
       },
@@ -45,7 +43,7 @@ class GameCell extends GetView<GameController> {
   }
 
   Color? get color {
-    switch (controller.contentType(row, column)) {
+    switch (controller.getContentType(row, column)) {
       case GameCellValueType.wrong:
         return Colors.red.withOpacity(0.3);
       case GameCellValueType.correct:
@@ -55,7 +53,7 @@ class GameCell extends GetView<GameController> {
   }
 
   TextStyle? get style {
-    switch (controller.contentType(row, column)) {
+    switch (controller.getContentType(row, column)) {
       case GameCellValueType.wrong:
         return Get.textTheme.titleLarge?.copyWith(color: Colors.red.shade900);
       case GameCellValueType.correct:
@@ -76,7 +74,7 @@ class GameCell extends GetView<GameController> {
             highlightElevation: 0,
             elevation: 0,
             padding: EdgeInsets.zero,
-            onPressed: controller.gameCellOnPressed(row, column),
+            onPressed: controller.onGameCellPressed(row, column),
             color: color,
             shape: _border,
             child: Center(child: content),

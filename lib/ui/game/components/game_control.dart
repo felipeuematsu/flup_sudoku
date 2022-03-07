@@ -1,6 +1,6 @@
 import 'package:flup_sudoku/ui/game/components/game_control_number_button.dart';
-import 'package:flup_sudoku/ui/game/components/game_control_type_button.dart';
-import 'package:flup_sudoku/ui/game/game_controller.dart';
+import 'package:flup_sudoku/ui/game/components/game_control_button.dart';
+import 'package:flup_sudoku/ui/game/controller/game_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,18 +15,18 @@ class GameControl extends GetView<GameController> {
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
-            Flexible(flex: 1, child: GameControlTypeButton(guessMode: GuessMode.insert)),
-            Flexible(flex: 1, child: GameControlTypeButton(guessMode: GuessMode.guess)),
-            Flexible(flex: 1, child: GameControlTypeButton(guessMode: GuessMode.antiGuess)),
+            Flexible(flex: 1, child: GameControlButton(type: GameControlType.insert)),
+            Flexible(flex: 1, child: GameControlButton(type: GameControlType.guess)),
+            Flexible(flex: 1, child: GameControlButton(type: GameControlType.antiGuess)),
+            Flexible(flex: 1, child: GameControlButton(type: GameControlType.clear)),
           ]),
           SizedBox(
-            height: 100,
-            child: ListView.builder(
-              itemExtent: context.width / 9,
-              padding: EdgeInsets.zero,
-              scrollDirection: Axis.horizontal,
-              itemCount: 9,
-              itemBuilder: (context, index) => GameControlNumberButton(value: index + 1),
+            height: 2 * context.width / 5,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                for (int i = 1; i <= 9; i++) GameControlNumberButton(value: i),
+              ],
             ),
           ),
         ],
