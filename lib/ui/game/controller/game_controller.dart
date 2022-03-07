@@ -12,7 +12,9 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
   late final SudokuModel model;
 
   final animationController = Get.find<GameAnimationController>();
+
   List<List<int>> get _answer => model.answerAsList;
+
   List<List<int>> get _initialState => model.initalStateAsList;
   final List<List<Rx<int>>> _currentState = [];
   final List<List<Rx<Map<int, InsertMode>>>> _guesses = [];
@@ -21,6 +23,7 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
   final _insertMode = InsertMode.guess.obs;
 
   set insertMode(InsertMode mode) => _insertMode.value = mode;
+
   InsertMode get insertMode => _insertMode.value;
 
   bool get isGuessing => insertMode == InsertMode.guess;
@@ -29,22 +32,22 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
 
   bool get isInserting => insertMode == InsertMode.insert;
 
-  final _mistakes = Rx<int>(0);
-  final _time = Rx<int>(0);
+  final _mistakes = 0.obs;
+  final _time = 0.obs;
+
+  final selectedRow = (-1).obs;
+  final selectedColumn = (-1).obs;
   bool isGameRunning = true;
 
   String get mistakes => _mistakes.value.toString();
 
   String get elapsedTime => Duration(seconds: _time.value).toString().substring(_time.value < 3600 ? 2 : 0, 7);
 
-  final selectedRow = Rx<int>(-1);
-  final selectedColumn = Rx<int>(-1);
 
   Map<int, InsertMode> get selectedCellValue => getCellValue(selectedRow.value, selectedColumn.value);
 
   @override
   void onInit() {
-
     Timer.periodic(const Duration(seconds: 1), (_) => isGameRunning ? _time.value++ : null);
 
     model = SudokuModel.fromCSVLine(
@@ -59,7 +62,6 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
       }
     }
     super.onInit();
-
   }
 
   int _getCurrentValue(row, column) => row < 0 || column < 0 ? 0 : _currentState[row][column].value;
@@ -115,14 +117,12 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
     }
     isGameRunning = false;
     CongratulationsPopup.showPopup(_time.value ~/ 60, _time.value % 60, _mistakes.value);
-
   }
 
   void _cleanCell() {
     if (!isGameRunning) return;
 
-    final row = selectedRow.value;
-    final column = selectedColumn.value;
+    final row = selectedRow.value, column = selectedColumn.value;
 
     if (isCorrect(row, column) && hints.isTrue) return;
 
@@ -133,29 +133,25 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
   void insertGuess(int guess) {
     if (!isGameRunning) return;
 
-    final row = selectedRow.value;
-    final column = selectedColumn.value;
+    final row = selectedRow.value, column = selectedColumn.value;
     if (row == -1 || column == -1 || _getCurrentValue(row, column) > 0) return;
 
     final value = _guesses[row][column].value[guess];
-    if (value != null) {
-      final guessType = value;
+    if (value == null) return _guesses[row][column].update((val) => val?.putIfAbsent(guess, () => insertMode));
 
-      if (insertMode == guessType) {
-        _guesses[row][column].update((val) => val?.remove(guess));
+    _guesses[row][column].update((val) {
+      if (insertMode == value) {
+        val?.remove(guess);
       } else {
-        _guesses[row][column].update((val) => val?[guess] = value == InsertMode.guess ? InsertMode.antiGuess : InsertMode.guess);
+        val?[guess] = value == InsertMode.guess ? InsertMode.antiGuess : InsertMode.guess;
       }
-    } else {
-      _guesses[row][column].update((val) => val?.putIfAbsent(guess, () => insertMode));
-    }
+    });
   }
 
   void insertAnswer(int answer) {
     if (!isGameRunning) return;
 
-    final row = selectedRow.value;
-    final column = selectedColumn.value;
+    final row = selectedRow.value, column = selectedColumn.value;
 
     if (row == -1 || column == -1 || _initialState[row][column] != 0 || _answer[row][column] == _getCurrentValue(row, column) || answer == _getCurrentValue(row, column)) return;
 

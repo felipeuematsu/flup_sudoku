@@ -17,12 +17,12 @@ class SudokuModel {
   final int difficulty;
 
   List<List<int>> get initalStateAsList => initialState.split('').map((e) => int.tryParse(e) ?? 0).fold(<List<int>>[[]], (value, element) {
-    if (value is List<List<int>>) value.last.length < 9 ? value.last.add(element) : value.add([element]);
+    if (value != null) value.last.length < 9 ? value.last.add(element) : value.add([element]);
     return value;
   }) ?? [];
 
   List<List<int>> get answerAsList => completedState.split('').map((e) => int.tryParse(e) ?? 0).fold(<List<int>>[[]], (value, element) {
-    if (value is List<List<int>>) value.last.length < 9 ? value.last.add(element) : value.add([element]);
+    if (value != null) value.last.length < 9 ? value.last.add(element) : value.add([element]);
     return value;
   }) ?? [];
 
@@ -36,7 +36,7 @@ class SudokuModel {
       id: list[0].isEmpty ? 0 : int.tryParse(list[0]) ?? 0,
       completedState: completedState,
       initialState: initialState,
-      difficulty: list[3].isEmpty ? 0 : int.tryParse(list[4]) ?? 0,
+      difficulty: list[4].isEmpty ? 0 : (double.tryParse(list[4]) ?? 0.0).toInt(),
     );
   }
 }

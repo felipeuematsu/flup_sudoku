@@ -18,10 +18,10 @@ class GameView extends GetView<GameController> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(36),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,7 +34,12 @@ class GameView extends GetView<GameController> {
                         Obx(() => Text('${GameStrings.mistakes.tr} ${controller.mistakes}')),
                       ],
                     ),
-                    const GameBoard(),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height - 2 * context.width / 5 - GameControl.heightConstants,
+                      ),
+                      child: const GameBoard(),
+                    ),
                   ],
                 ),
               ),

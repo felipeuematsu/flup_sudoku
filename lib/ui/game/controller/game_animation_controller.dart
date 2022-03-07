@@ -25,4 +25,11 @@ class GameAnimationController extends GetxController with GetTickerProviderState
     horizontalAnimation = Tween<double>(begin: -1, end: 8).animate(_horizontalAnimationController)..addListener(() => update());
     super.onInit();
   }
+
+  @override
+  void dispose() {
+    _verticalAnimationController.dispose();
+    _horizontalAnimationController.dispose();
+    super.dispose();
+  }
 }

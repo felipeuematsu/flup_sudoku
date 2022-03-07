@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 class GameControl extends GetView<GameController> {
   const GameControl({Key? key}) : super(key: key);
 
+  static const heightConstants = 2 * GameControlButton.padding + GameControlButton.height + 2 * GameControlNumberButton.padding + 33;
+
   @override
   Widget build(BuildContext context) {
     return Material(

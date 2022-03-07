@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 class GameControlNumberButton extends GetView<GameController> {
   const GameControlNumberButton({required this.value, Key? key}) : super(key: key);
 
+  static const padding = 12.0;
   final int value;
 
   Color get _color {
@@ -24,19 +25,21 @@ class GameControlNumberButton extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SizedBox.square(
-      dimension: context.width / 5,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+    return Obx(() => Padding(
+      padding: const EdgeInsets.all(padding),
+      child: SizedBox.square(
+        dimension: context.width / 8,
         child: MaterialButton(
               focusElevation: 50,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               onPressed: controller.onNumberButtonPressed(value),
               color: _color,
-              child: Text(
-                value.toString(),
-                textAlign: TextAlign.center,
-                style: Get.textTheme.displaySmall,
+              child: FittedBox(
+                child: Text(
+                  value.toString(),
+                  textAlign: TextAlign.center,
+                  style: Get.textTheme.displaySmall,
+                ),
               ),
             ),
       ),

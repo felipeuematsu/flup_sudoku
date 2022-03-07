@@ -7,6 +7,9 @@ class GameControlButton extends GetView<GameController> {
 
   final GameControlType type;
 
+  static const padding = 4.0;
+  static const height = 36.0;
+
   Color get _color {
     switch (type) {
       case GameControlType.guess:
@@ -19,6 +22,7 @@ class GameControlButton extends GetView<GameController> {
         return Colors.blueGrey.shade200;
     }
   }
+
   Color? get _disabledColor {
     switch (type) {
       case GameControlType.guess:
@@ -49,9 +53,10 @@ class GameControlButton extends GetView<GameController> {
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(padding),
         child: Obx(
           () => MaterialButton(
+            height: height,
             disabledColor: _disabledColor,
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
             color: _color,
