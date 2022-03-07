@@ -7,6 +7,8 @@ class GameTranslations extends AbstractTranslations {
     GameStrings.id: 'Id:',
     GameStrings.time: 'Time:',
     GameStrings.mistakes: 'Mistakes:',
+    GameStrings.congratulationsTitle: 'Congratulations!',
+    GameStrings.congratulationsMessage: 'You completed the game in {0} minutes and {1} seconds with {2} mistakes.',
   };
 
   @override
@@ -14,6 +16,8 @@ class GameTranslations extends AbstractTranslations {
     GameStrings.id: 'ID:',
     GameStrings.time: 'Tempo:',
     GameStrings.mistakes: 'Erros:',
+    GameStrings.congratulationsTitle: 'Parabéns!',
+    GameStrings.congratulationsMessage: 'Você completou o jogo em {0} minutos e {1} segundos com {2} erros.',
   };
 }
 
@@ -21,6 +25,8 @@ enum GameStrings {
   mistakes,
   id,
   time,
+  congratulationsTitle,
+  congratulationsMessage,
 }
 
 extension GameStringsExtension on GameStrings {

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flup_sudoku/model/sudoku_model.dart';
+import 'package:flup_sudoku/ui/game/components/congratulations_popup.dart';
 import 'package:flup_sudoku/ui/game/components/game_cell.dart';
 import 'package:flup_sudoku/ui/game/components/game_control_button.dart';
 import 'package:flup_sudoku/ui/game/controller/game_animation_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// The GameController is the main class that controls the flow of the game.
@@ -59,6 +59,7 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
       }
     }
     super.onInit();
+
   }
 
   int _getCurrentValue(row, column) => row < 0 || column < 0 ? 0 : _currentState[row][column].value;
@@ -113,6 +114,8 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
       }
     }
     isGameRunning = false;
+    CongratulationsPopup.showPopup(_time.value ~/ 60, _time.value % 60, _mistakes.value);
+
   }
 
   void _cleanCell() {

@@ -20,6 +20,7 @@ enum CommonStrings {
   sudoku,
   activated,
   deactivated,
+  confirm,
 }
 
 extension CommonStringsExt on CommonStrings {
@@ -34,6 +35,7 @@ class CommonTranslations extends AbstractTranslations {
         CommonStrings.sudoku: 'Sudoku',
         CommonStrings.activated: 'Activated',
         CommonStrings.deactivated: 'Deactivated',
+        CommonStrings.confirm: 'Confirm',
       };
 
   @override
@@ -43,5 +45,6 @@ class CommonTranslations extends AbstractTranslations {
         CommonStrings.sudoku: 'Sudoku',
         CommonStrings.activated: 'Ativado',
         CommonStrings.deactivated: 'Desativado',
+        CommonStrings.confirm: 'Confirmar',
       };
 }
