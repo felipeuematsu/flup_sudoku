@@ -14,26 +14,28 @@ class GameControlNumberButton extends GetView<GameController> {
     if (cellType == null) return Colors.white;
 
     switch (cellType) {
-      case InsertMode.guess:
-        return Colors.green.shade700;
       case InsertMode.insert:
-        return Colors.grey;
+        return Get.theme.colorScheme.primaryContainer;
+      case InsertMode.guess:
+        return Get.theme.colorScheme.tertiaryContainer;
       case InsertMode.antiGuess:
-        return Colors.red.shade700;
+        return Get.theme.colorScheme.errorContainer;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => Padding(
-      padding: const EdgeInsets.all(padding),
-      child: SizedBox.square(
-        dimension: context.width / 8,
-        child: MaterialButton(
-              focusElevation: 50,
+          padding: const EdgeInsets.all(padding),
+          child: SizedBox.square(
+            dimension: context.width / 8,
+            child: MaterialButton(
+              elevation: controller.gameNumberButtonActivated(value) ? 4 : 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               onPressed: controller.onNumberButtonPressed(value),
               color: _color,
+              disabledColor: _color.withOpacity(0.5),
+              highlightColor: Colors.transparent,
               child: FittedBox(
                 child: Text(
                   value.toString(),
@@ -42,7 +44,7 @@ class GameControlNumberButton extends GetView<GameController> {
                 ),
               ),
             ),
-      ),
-    ));
+          ),
+        ));
   }
 }

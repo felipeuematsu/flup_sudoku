@@ -11,9 +11,8 @@ class GameControl extends GetView<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 10,
-      shadowColor: Colors.black,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.center, children: const [

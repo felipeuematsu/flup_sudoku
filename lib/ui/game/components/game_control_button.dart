@@ -13,37 +13,37 @@ class GameControlButton extends GetView<GameController> {
   Color get _color {
     switch (type) {
       case GameControlType.guess:
-        return Colors.yellow.shade200;
+        return Get.theme.colorScheme.secondaryContainer;
       case GameControlType.antiGuess:
-        return Colors.red.shade200;
+        return Get.theme.colorScheme.secondaryContainer;
       case GameControlType.insert:
-        return Colors.blue.shade200;
+        return Get.theme.colorScheme.secondaryContainer;
       default:
-        return Colors.blueGrey.shade200;
+        return Get.theme.colorScheme.onSurfaceVariant;
     }
   }
 
   Color? get _disabledColor {
     switch (type) {
       case GameControlType.guess:
-        return Colors.yellow.shade100;
+        return Get.theme.colorScheme.secondaryContainer.withOpacity(0.5);
       case GameControlType.antiGuess:
-        return Colors.red.shade100;
+        return Get.theme.colorScheme.secondaryContainer.withOpacity(0.5);
       case GameControlType.insert:
-        return Colors.blue.shade100;
-      case GameControlType.clear:
-        return Colors.blueGrey.shade100;
+        return Get.theme.colorScheme.secondaryContainer.withOpacity(0.5);
+      default:
+        return Get.theme.colorScheme.onSurfaceVariant.withOpacity(0.5);
     }
   }
 
   Icon get _icon {
     switch (type) {
       case GameControlType.guess:
-        return const Icon(Icons.help_outline);
+        return const Icon(Icons.edit);
       case GameControlType.insert:
         return const Icon(Icons.add);
       case GameControlType.antiGuess:
-        return const Icon(Icons.warning);
+        return const Icon(Icons.edit, color: Colors.redAccent,);
       case GameControlType.clear:
         return const Icon(Icons.clear);
     }

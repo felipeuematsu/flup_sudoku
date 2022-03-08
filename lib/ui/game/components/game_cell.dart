@@ -8,12 +8,18 @@ class GameCell extends GetView<GameController> {
   final int row, column;
 
   Border get _border => controller.isSelected(row, column)
-      ? Border.all(color: Colors.red)
+      ? Border.all(color: Get.theme.colorScheme.tertiary)
       : Border(
-          left: BorderSide(color: column == 0 ? Colors.black : Colors.grey.shade700, width: column % 3 == 0 ? 1 : 0.25),
-          top: BorderSide(color: row == 0 ? Colors.black : Colors.grey.shade700, width: row % 3 == 0 ? 1 : 0.25),
-          right: BorderSide(color: column == 8 ? Colors.black : Colors.grey.shade700, width: (column + 1) % 3 == 0 ? 1 : 0),
-          bottom: BorderSide(color: row == 8 ? Colors.black : Colors.grey.shade700, width: (row + 1) % 3 == 0 ? 1 : 0),
+          left: BorderSide(
+            color: Get.theme.colorScheme.outline.withOpacity(column % 3 == 0 ? 1 : .3),
+            style: column == 0 ? BorderStyle.none : BorderStyle.solid,
+          ),
+          top: BorderSide(
+            color: Get.theme.colorScheme.outline.withOpacity(row % 3 == 0 ? 1 : .3),
+            style: row == 0 ? BorderStyle.none : BorderStyle.solid,
+          ),
+          right: const BorderSide(style: BorderStyle.none),
+          bottom: const BorderSide(style: BorderStyle.none),
         );
 
   Widget get content {

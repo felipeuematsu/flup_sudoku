@@ -14,18 +14,23 @@ class FlupSudoku extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const colorScheme = lightColorScheme;
+
     return GetMaterialApp(
       title: 'Flup Sudoku',
       locale: const Locale('en', 'US'),
       translations: Strings(),
       getPages: Pages.get,
-      initialRoute: PageNames.game.route,
+      initialRoute: PageNames.home.route,
       theme: ThemeData(
-        scaffoldBackgroundColor: lightColorScheme.background,
-        colorScheme: lightColorScheme,
-        textTheme: GoogleFonts.robotoTextTheme()
+        scaffoldBackgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.background,
+        colorScheme: colorScheme,
+        primaryColor: colorScheme.primary,
+        primaryColorLight: colorScheme.primary,
+        primaryColorDark: colorScheme.inversePrimary,
+        textTheme: GoogleFonts.robotoTextTheme(),
       ),
     );
   }
 }
-

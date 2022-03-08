@@ -19,12 +19,13 @@ class CongratulationsPopup extends GetView<GameController> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Get.theme.colorScheme.primaryContainer,
       title: Text(GameStrings.congratulationsTitle.tr, style: Get.textTheme.titleLarge),
       content: Text(_message, style: Get.textTheme.bodyMedium),
       actions: [
         MaterialButton(
-          color: Colors.green,
-          child: Text(CommonStrings.confirm.tr, style: Get.textTheme.button?.copyWith(color: Colors.white)),
+          color: Get.theme.colorScheme.primary,
+          child: Text(CommonStrings.confirm.tr, style: Get.textTheme.button?.copyWith(color: Get.theme.colorScheme.onPrimary)),
           onPressed: () => Get.back(),
         ),
       ],

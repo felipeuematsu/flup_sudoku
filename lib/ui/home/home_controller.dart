@@ -1,3 +1,4 @@
+import 'package:flup_sudoku/common/pages.dart';
 import 'package:flup_sudoku/ui/home/components/home_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,15 +34,15 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   Future<void> onButtonPressed(HomeButtonType type) async {
     switch (type) {
       case HomeButtonType.newGame:
-        return Get.to('/game');
+        return Get.toNamed(PageNames.game.route);
       case HomeButtonType.loadGame:
-        return Get.to('/load');
+        return Get.toNamed(PageNames.game.route);
       case HomeButtonType.settings:
-        return Get.to('/settings');
+        return Get.toNamed('/settings');
       case HomeButtonType.about:
-        return Get.to('/about');
+        return Get.toNamed('/about');
       case HomeButtonType.liked:
-        return Get.to('/liked');
+        return Get.toNamed('/liked');
     }
   }
 }

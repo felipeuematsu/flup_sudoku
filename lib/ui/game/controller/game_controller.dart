@@ -34,17 +34,22 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
 
   final _mistakes = 0.obs;
   final _time = 0.obs;
-
   final selectedRow = (-1).obs;
   final selectedColumn = (-1).obs;
+
   bool isGameRunning = true;
 
   String get mistakes => _mistakes.value.toString();
 
   String get elapsedTime => Duration(seconds: _time.value).toString().substring(_time.value < 3600 ? 2 : 0, 7);
 
-
   Map<int, InsertMode> get selectedCellValue => getCellValue(selectedRow.value, selectedColumn.value);
+
+  bool gameNumberButtonActivated(int number) {
+    final cellValue = getCellValue(selectedRow.value, selectedColumn.value);
+    if (hints.isTrue && isCorrect(selectedRow.value, selectedColumn.value)) return false;
+    return !(cellValue[number] != _insertMode.value && cellValue[number] == InsertMode.insert);
+  }
 
   @override
   void onInit() {
@@ -89,11 +94,11 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
       case GameControlType.insert:
         return insertMode != InsertMode.insert ? () => insertMode = InsertMode.insert : null;
       case GameControlType.clear:
-        return getCellValue(selectedRow.value, selectedColumn.value).isNotEmpty ? () => _cleanCell() : null;
+        return getCellValue(selectedRow.value, selectedColumn.value).isNotEmpty && !(hints.isTrue && isCorrect(selectedRow.value, selectedColumn.value)) ? () => _cleanCell() : null;
     }
   }
 
-  void Function() onNumberButtonPressed(int value) => () => insertMode == InsertMode.insert ? insertAnswer(value) : insertGuess(value);
+  void Function()? onNumberButtonPressed(int value) => gameNumberButtonActivated(value) ? () => insertMode == InsertMode.insert ? insertAnswer(value) : insertGuess(value) : null;
 
   void Function() onGameCellPressed(int row, int column) => () {
         final verticalDiff = (selectedRow.value - row).abs();
@@ -153,7 +158,12 @@ class GameController extends GetxController with GetTickerProviderStateMixin {
 
     final row = selectedRow.value, column = selectedColumn.value;
 
-    if (row == -1 || column == -1 || _initialState[row][column] != 0 || _answer[row][column] == _getCurrentValue(row, column) || answer == _getCurrentValue(row, column)) return;
+    if (row == -1 || column == -1 || isInitial(row, column) || isCorrect(row, column)) return;
+
+    if (answer == _getCurrentValue(row, column)) {
+      _currentState[row][column].value = 0;
+      return;
+    }
 
     _guesses[row][column].value = {};
     _currentState[row][column].value = answer;
